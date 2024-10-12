@@ -31,10 +31,6 @@ app.register_blueprint(qa_bp)
 app.register_blueprint(auth_bp)
 
 
-@app.route('/')
-def hello_world():
-    return "Hello 熊猫问答!"
-
 
 if __name__ == '__main__':
     # 路由列表

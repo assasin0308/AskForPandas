@@ -1,15 +1,15 @@
 import json
 
-from flask import Blueprint,render_template,jsonify,redirect,url_for
+from flask import Blueprint,render_template,jsonify,redirect,url_for,session
 from flask import request
 from exts import mail,db
 from flask_mail import Message
 import string
 import random
 from models import EmailCaptchaModel
-from .forms import RegisterForm
+from .forms import RegisterForm,LoginForm
 from models import UserModel
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash,check_password_hash
 
 # /auth
 bp = Blueprint("auth",__name__,url_prefix="/auth")
@@ -19,11 +19,32 @@ def login():
     if request.method == 'GET':
         return render_template("login.html")
     else:
-        pass
+        form = LoginForm(request.form)
+        if form.validate():
+            email = form.email.data
+            password = form.password.data
+            user = UserModel.query.filter_by(email=email).first()
+            print('auth.login: ')
+            print(user)
+            if not user:
+                print("用户不存在!")
+                return redirect(url_for("auth.login"))
+            if check_password_hash(user.password,password):
+                # flask 中的session是经过加密后存储在cookie中
+                session['user_id'] = user.id
+                return redirect("/")
+
+            else:
+                print('密码错误!')
+                return redirect(url_for("auth.login"))
+        else:
+            print(form.errors)
+            return redirect(url_for("auth.login"))
 
 
 
-    
+
+
 
 
 @bp.route("/register",methods=['GET','POST'])
