@@ -1,19 +1,29 @@
 import json
 
-from flask import Blueprint,render_template,jsonify,Response
+from flask import Blueprint,render_template,jsonify,redirect,url_for
 from flask import request
 from exts import mail,db
 from flask_mail import Message
 import string
 import random
 from models import EmailCaptchaModel
+from .forms import RegisterForm
+from models import UserModel
+from werkzeug.security import generate_password_hash
 
 # /auth
 bp = Blueprint("auth",__name__,url_prefix="/auth")
 
-@bp.route("/login")
+@bp.route("/login",methods=['GET','POST'])
 def login():
-    return "/"
+    if request.method == 'GET':
+        return render_template("login.html")
+    else:
+        pass
+
+
+
+    
 
 
 @bp.route("/register",methods=['GET','POST'])
@@ -23,7 +33,23 @@ def register():
     else:
         # 验证用户提交的邮箱和验证码是否对应且正确
         # 表单验证：flask-wtf: wtforms
-        pass
+        form = RegisterForm(request.form)
+        if form.validate():
+            email = form.email.data
+            username = form.username.data
+            password = form.password.data
+
+            user = UserModel(email=email,username=username,password=generate_password_hash(password))
+            db.session.add(user)
+            db.session.commit()
+
+            # return redirect("/auth/login")
+            return redirect(url_for("auth.login"))
+            # return jsonify({"code": 200, "msg": "success", "data": user})
+
+        else:
+            print(form.errors)
+            return redirect(url_for("auth.register"))
 
 
 

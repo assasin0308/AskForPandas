@@ -9,7 +9,7 @@ class RegisterForm(wtforms.Form):
     captcha = wtforms.StringField(validators=[Length(min=6,max=6,message="验证码格式错误!")])
     username = wtforms.StringField(validators=[Length(min=6,max=20,message="用户名格式错误!")])
     password = wtforms.StringField(validators=[Length(min=6,max=20,message="密码格式错误!")])
-    password_confirm = wtforms.StringField(validators=[EqualTo("password")])
+    password_confirm = wtforms.StringField(validators=[EqualTo("password",message="两次密码输入不一致!")])
 
     # 验证邮箱是否被注册
     def validate_email(self,field):
