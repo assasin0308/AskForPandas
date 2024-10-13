@@ -5,7 +5,7 @@ def login_required(func):
     @wraps(func)
     def inner(*args,**kwargs):
         if hasattr(g,"user") and g.user:
-            func(*args,**kwargs)
+            return func(*args,**kwargs)
         else:
             return redirect(url_for("auth.login"))
 
