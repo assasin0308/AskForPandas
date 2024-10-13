@@ -13,7 +13,8 @@ bp = Blueprint("qa",__name__,url_prefix="/")
 
 @bp.route("/")
 def index():
-    return render_template("index.html")
+    questions = QuestionModel.query.order_by(QuestionModel.create_time.desc()).all()
+    return render_template("index.html",questions=questions)
 
 @bp.route("/qa/publish",methods = ['GET','POST'])
 @login_required

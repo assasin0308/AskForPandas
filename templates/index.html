@@ -14,19 +14,22 @@
             <div class="col"></div>
             <div class="col-10">
                 <ul class="question-ul">
-                    <li>
+                    {%  for question in questions %}
+                         <li>
                         <div class="side-question">
-                            <img class="side-question-avatar" src="./static/images/avatar.jpg" alt="">
+                            <img class="side-question-avatar" src="{{ url_for('static',filename='images/avatar.jpg') }}" alt="">
                         </div>
                         <div class="question-main">
-                            <div class="question-title"><a href="#">钢铁侠是怎样炼成的</a></div>
-                            <div class="question-content">传奇钢铁侠的成长之路</div>
+                            <div class="question-title"><a href="#">{{ question.title }}</a></div>
+                            <div class="question-content">{{ question.content }}</div>
                             <div class="question-detail">
-                                <span class="question-author">托尼史塔克</span>
-                                <span class="question-time">2022年12月1日</span>
+                                <span class="question-author">from： {{ question.author.username }}</span>
+                                <span class="question-time">{{ question.create_time }}</span>
                             </div>
                         </div>
                     </li>
+                    {%  endfor %}
+
                 </ul>
             </div>
             <div class="col"></div>
