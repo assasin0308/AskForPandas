@@ -41,3 +41,9 @@ def publish_question():
             print(form.errors)
             return redirect(url_for("qa.publish_question"))
 
+
+
+@bp.route("/qa/detail/<qa_id>")
+def question_detail(qa_id):
+    question = QuestionModel.query.get(qa_id)
+    return render_template("detail.html",question=question)
