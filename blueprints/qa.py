@@ -2,6 +2,8 @@ from flask import Blueprint,render_template,request,g,redirect,url_for
 from .forms import QuestionForm
 from models import QuestionModel
 from exts import db
+from decorators import login_required
+
 
 
 
@@ -9,13 +11,18 @@ from exts import db
 bp = Blueprint("qa",__name__,url_prefix="/")
 
 
-
 @bp.route("/")
 def index():
     return render_template("index.html")
 
 @bp.route("/qa/publish",methods = ['GET','POST'])
+@login_required
 def publish_question():
+    # 判断登录状态 -> 登录装饰器
+    # if not g.user:
+    #     return redirect(url_for("auth.login"))
+
+
     if request.method == 'GET':
         return render_template('public_question.html')
     else:
