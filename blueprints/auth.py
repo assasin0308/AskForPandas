@@ -42,6 +42,14 @@ def login():
             return redirect(url_for("auth.login"))
 
 
+@bp.route("/logout")
+def logout():
+    # 清除session所有信息
+    session.clear()
+    # return redirect(url_for("auth.login"))
+    return redirect("/")
+
+
 
 
 

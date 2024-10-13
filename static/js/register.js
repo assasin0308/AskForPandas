@@ -8,6 +8,12 @@ function bindEmailCaptchaClick(){
 
          email = $("input[name='email']").val();
          console.log('获取到的邮箱账号:  ' + email);
+         var emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+         if (!emailRegex.test(email) || !email)  {
+             alert("请输入有效的邮箱地址!");
+             return;
+        }
+
          $.ajax({
              url: "/auth/captcha/email?email=" + email,
              method: "GET",
