@@ -65,3 +65,12 @@ def publish_answer():
     else:
         print(form.errors)
         return  redirect(url_for("qa.question_detail",qa_id=request.form.get("question_id")))
+
+
+
+# 关键字搜索问题标题
+@bp.route("/search")
+def search():
+    q = request.args.get("q")
+    questions = QuestionModel.query.filter(QuestionModel.title.contains(q)).all()
+    return render_template("index.html",questions=questions)
